@@ -44,7 +44,6 @@ import static com.java4now.meteo_webfx.Custom_ChoiceBox.geocode_lat;
 import static com.java4now.meteo_webfx.Custom_ChoiceBox.geocode_lon;
 import static com.java4now.meteo_webfx.shared.Forecast_current.Background_audio_name;
 
-
 public class Meteo_WebFX extends Application {
 
     Stage dialog;
