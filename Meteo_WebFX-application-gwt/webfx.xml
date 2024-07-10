@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project executable="true">
+
+    <exported-packages>
+        <source-packages/>
+        <resource-packages/>
+    </exported-packages>
+
+    <dependencies>
+        <used-by-source-modules/>
+    </dependencies>
+
+    <html>
+        <head>
+            <!-- ######################## OBAVEZNO IMPORT JSCRIPTE ################################# -->
+            <script type="text/javascript" src="com/java4now/meteo_webfx/html2canvas-master/dist/html2canvas.js"></script>
+            <!-- ################################################################################### -->
+        </head>
+        <body>
+            <script>
+                <![CDATA[
+                function toISOLocal(d) {
+                var z  = n =>  ('0' + n).slice(-2);
+                var zz = n => ('00' + n).slice(-3);
+                var off = d.getTimezoneOffset();
+                var sign = off > 0? '-' : '+';
+                off = Math.abs(off);
+
+                return d.getFullYear() + '-'
+                + z(d.getMonth()+1) + '-' +
+                z(d.getDate()) + 'T' +
+                z(d.getHours()) + ':'  +
+                z(d.getMinutes()) + ':' +
+                z(d.getSeconds()) + '.' +
+                zz(d.getMilliseconds());
+                //                     sign + z(off/60|0) + ':' + z(off%60);
+                }
+
+
+
+                // Screenshoot celog ekrana uz pomoc html2canvas jscript aplikacije
+                // backgroundColor: null  - transparentna pozadina
+                function screenshot(){
+                //----------------------------- default pozadina bela
+                //             html2canvas(document.body).then(function(canvas) {
+                html2canvas(document.body,{backgroundColor: '#000000',allowTaint: true,logging: true}).then(function(canvas) {
+                //              document.body.appendChild(canvas);                   // dodaje image u body html stranice
+                //      SAVE
+                //              var base64URL = canvas.toDataURL('image/jpeg').replace('image/jpeg', 'image/octet-stream');
+                var base64URL = canvas.toDataURL('image/png');
+                //				console.log(base64URL);
+                var aDownloadLink = document.createElement('a'); 	 // Create a link
+                aDownloadLink.download = 'canvas_image.png';        // Add the name of the file to the link
+                aDownloadLink.href = base64URL;                      // Attach the data to the link
+                aDownloadLink.click();                               // Get the code to click the download link
+                });
+                }
+               ]]>
+            </script>
+        </body>
+    </html>
+
+</project>

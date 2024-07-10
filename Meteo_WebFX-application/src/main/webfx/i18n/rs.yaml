@@ -1,0 +1,10 @@
+humidity:
+      text: "Vlaznost: "
+Wind_Speed:
+      text: "Brzina vetra: "
+Wind_Direction:
+      text: "Pravac vetra: "
+Pressure:
+      text: "Pritisak: "
+Dust:
+      text: "Prasina: "

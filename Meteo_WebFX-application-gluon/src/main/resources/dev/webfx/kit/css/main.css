@@ -1,0 +1,136 @@
+
+/*===== webfx-extras-webtext-javafx@main.css from webfx-extras-webtext-peers-openjfx =====*/
+
+HtmlText, HtmlTextEditor {
+    -fx-skin: "dev.webfx.kit.mapper.peers.javafxcontrols.openjfx.skin.FxControlPeerSkin";
+}
+
+/*===== javafx@main.css from Meteo_WebFX-application =====*/
+
+/***** OPENJFX *****/
+.label{
+/*    -fx-background-color: rgba(120, 120, 200, 0.5) !important; */
+    -fx-text-fill: White;
+    -fx-font-size:12;
+    -fx-font-weight:bold;
+    -fx-border-color: none;
+}
+
+.city_label{
+/*    -fx-background-color: rgba(120, 120, 200, 0.5) !important; */
+    -fx-text-fill: White;
+    -fx-font-size:16;
+    -fx-font-weight:bold;
+    -fx-border-color: none;
+}
+
+/*-------------- Button ---------------*/
+.my_button {
+ /*   -fx-background-color:white; */
+    -fx-background-color: rgba(120, 120, 200, 0.5) !important;
+ /*   -fx-background-color: linear-gradient(180deg, rgba(120, 120, 200, 0.5), rgba(200, 200, 200, 0.5)) !important; */
+ /*   -fx-font-family:courier_new; */
+    -fx-text-fill:White;
+    -fx-border-width:2;
+    -fx-border-color: Wheat;
+ /*   -fx-background-radius:10;  */
+    -fx-border-radius: 5;
+    -fx-background-insets:0;
+/*    -fx-font-size:16; */
+    }
+
+ .my_button:hover {
+   -fx-border-width: 1;
+   -fx-background-color: rgba(120, 120, 200, 0.1) !important;
+   -fx-border-color: #939393;
+ }
+
+  .my_button:pressed {
+     -fx-border-width:1;
+     -fx-background-color:rgba(120, 120, 200, 1) !important;
+     -fx-text-fill:Black;
+  }
+  /* Nema uticaja na openjfx active je samo za web */
+  /*
+  .button:active {
+     -fx-border-width: 1;
+     -fx-border-color: Wheat;
+  }
+  */
+
+.my_button[disabled] {
+  -fx-cursor: default;
+  -fx-text-fill: #888;
+}
+
+.choice_list {
+ /*   -fx-background-color:white; */
+    -fx-background-color: rgba(120, 120, 200, 0.5) !important;
+ /*   -fx-background-color: linear-gradient(180deg, rgba(120, 120, 200, 0.5), rgba(200, 200, 200, 0.5)) !important; */
+ /*   -fx-font-family:courier_new; */
+    -fx-text-fill:White;
+    -fx-border-width:2;
+    -fx-border-color: Wheat;
+ /*   -fx-background-radius:10;  */
+/*    -fx-border-radius: 5;   */
+    -fx-background-insets:0;
+ }
+
+ .choice_list:hover {
+     -fx-border-width:1;
+     -fx-background-color:rgba(120, 120, 200, 1) !important;
+     -fx-text-fill:Black;
+   }
+
+ .choice_list:focused {
+     -fx-border-width:1;
+     -fx-background-color:rgba(120, 120, 200, 1) !important;
+     -fx-text-fill:Black;
+   }
+
+ .choice_list:focus-visible {
+     -fx-border-width:1;
+     -fx-background-color:rgba(120, 120, 200, 1) !important;
+     -fx-text-fill:Black;
+   }
+
+/*-------------- text-field --------------*/
+
+ .custom_textField {
+   -fx-text-fill:white;
+   -fx-padding: 0;
+   -fx-height: 16px;
+   -fx-position: relative;
+   -fx-left: 0;
+   -fx-outline: none;
+   -fx-border-width: 1;
+   -fx-border-color: rgba(0, 0, 0, .15);
+   -fx-background-color: rgba(144, 238, 144, 0.5) !important;
+   -fx-font-size: 16px;
+   /* najbolje u istom resource dir gde su i ostali fajlovi - dodati je u resources/com.java4now.meteo_webfx za javafx */
+     -fx-background-image:url('drop.png'); /* http://icons.iconarchive.com/icons/rockettheme/halloween/32/pumpkin-icon.png */
+     -fx-background-repeat: no-repeat;
+     -fx-background-position: right center;
+ }
+
+ /*---------- Panel --------------*/
+ .panel{
+ /* rgba utice samo na Opacity pozadine panela i widgeta */
+ 	-fx-background-color: rgba(120, 120, 200, .3);
+ /* Utice na pozadinu i child widgete */
+ /*	background: #f5f9dc; */
+ /*	opacity: .4; */
+ /* Only text opacity */
+ /*	color: rgba(234, 240, 246, 0.8);*/
+ /* Border opacity */
+   -fx-border-width: 10;
+   -fx-border-color: rgba(120, 120, 200, .3);
+ }
+
+ .ToolTip_html{
+       -fx-border-width: 3;               /* crni okvir */
+       -fx-border-color: rgba(0, 0, 0, .8);
+    margin-top: 7px;                   /* razmak od vrha HTML komponente na popup- do vrha teksta */
+    margin-bottom: 7px;
+    -fx-background-color: rgba(0, 0, 0, 0.8) !important;
+ }

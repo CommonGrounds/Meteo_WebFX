@@ -1,0 +1,245 @@
+
+/*===== webfx-kit-javafxgraphics-web@main.css from webfx-kit-javafxgraphics-peers-gwt-j2cl =====*/
+
+/* Mocking some basic JavaFX behaviours */
+body {
+    overflow: hidden; /* Disabling browser horizontal and vertical scroll bars */
+    margin: 0; /* Removing the default margin around the body */
+    /* Disabling user selection by default */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Making disabled nodes semi-transparent */
+.disabled {
+    opacity: 50%;
+}
+
+/* When fill and stroke are not set by application code, we make them transparent by default like in JavaFX (otherwise
+ the browser will make them black). */
+fx-svgpath svg {
+    fill: none;
+    stroke: none;
+}
+/*===== webfx-kit-javafxcontrols-web@main.css from webfx-kit-javafxcontrols-peers-gwt-j2cl =====*/
+
+/***** Global variables *****/
+:root {
+    --fx-border-color: #c0c0c0;
+    --fx-border-radius: 5px;
+    --fx-border-style: solid;
+    --fx-border-width: 1px;
+    --fx-border-color-focus: #0096D6;
+    --fx-textfield-background: white;
+}
+
+::placeholder {
+    color: #888;
+}
+
+fx-button > fx-background {
+    background: linear-gradient(180deg, white, #e0e0e0);
+    border-radius: var(--fx-border-radius);
+}
+
+fx-button > fx-border, fx-textfield > fx-border, textarea {
+    border-color: var(--fx-border-color);
+    border-style: var(--fx-border-style);
+    border-width: var(--fx-border-width);
+    border-radius: var(--fx-border-radius);
+}
+
+fx-textfield:focus-within > fx-border, textarea:focus {
+    border-color: var(--fx-border-color-focus);
+    outline: none !important;
+}
+
+textarea {
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+fx-hyperlink fx-text:hover {
+    text-decoration: underline;
+}
+
+fx-textfield > fx-background {
+    background: var(--fx-textfield-background);
+    border-radius: var(--fx-border-radius);
+}
+
+/* Removing borders, outlines and background for input elements (to not interfere with the above) */
+input[type="text"], input[type="password"] {
+    border: none;
+    outline: none;
+    background-color: transparent;
+}
+
+/* Cross for the tab close button */
+.tab-close-button {
+    background-image: url( "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' stroke='%23444' stroke-width='2' stroke-linejoin='round' viewBox=\'0 0 16 16\'%3E%3Cpath d=\'M 4,4 L 12,12 Z M 4,12 L 12,4 Z\'/%3E%3C/svg%3E");
+}
+
+/*===== webfx-kit-javafxweb-web@main.css from webfx-kit-javafxweb-peers-gwt-j2cl =====*/
+
+iframe {
+    border: none;
+}
+
+/*===== web@main.css from Meteo_WebFX-application =====*/
+
+/***** GWT theme CLEAN *****/
+
+/********* To disable default webfx settings **********/
+:root {
+    --fx-border-color: none;
+    --fx-border-radius: none;
+    --fx-border-style: none;
+    --fx-border-width: none;
+    --fx-border-color-focus: none;
+    --fx-textfield-background: none;
+}
+fx-button > fx-background {
+      background: none;
+      border-radius: none;
+}
+/******************************************************/
+
+.my_button {
+    background-color: rgba(120, 120, 200, 0.5) !important;
+    color: white;
+    border:2px solid Wheat;
+    border-radius: 8px;
+/*    padding: 0px 7px 0px; */ /* gore desno dole  */
+}
+
+.my_button:hover {
+  border-width: 1;
+  background-color: rgba(120, 120, 200, 0.1) !important;
+  border-color: #939393;
+}
+
+/* nema uticaja na html
+ .button:pressed {
+    background-color: Green !important;
+ }
+ */
+.my_button:active {
+     border-width:1;
+     background-color:rgba(120, 120, 200, 1) !important;
+     color:Black;
+     box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+}
+
+.my_button[disabled] {
+  cursor: default;
+  color: #888;
+}
+.my_button[disabled]:hover {
+  border: 1px outset #ccc;
+}
+/*----------------------------------*/
+.label{
+    background-color:transparent;
+    color:white;
+    font-family: Verdana, serif;
+/*    font-family: inherit; */
+    font-size:18px;      /*   font-size: 100%;  */
+    font-style: normal;
+    font-weight: bold;   /*  font-weight: 900;  */
+}
+
+.city_label{
+    background-color:transparent;
+    color:white;
+    font-family: Verdana, serif;
+/*    font-family: inherit; */
+    font-size:16px;      /*   font-size: 100%;  */
+    font-style: normal;
+    font-weight: bold;   /*  font-weight: 900;  */
+}
+
+.choice_list {
+    background-color: rgba(120, 120, 200, 0.5) !important;
+    color: white;
+    border:2px solid Wheat;
+/*    border-radius: 8px; */
+}
+
+.choice_list:hover {
+    border-width: 1;
+    background-color: rgba(120, 120, 200, 0.1) !important;
+    border-color: #939393;
+  }
+
+.choice_list_focus {
+    border-width: 1;
+    background-color: rgba(120, 120, 200, 0.1) !important;
+    border-color: #939393;
+  }
+
+/*-------------- text-field --------------*/
+.custom_textField[type="text"] {
+   color: White;
+   padding: 0px !important;
+   /*height: 16px !important;*/
+ /*  position: center !important;  */
+   left: 0px !important;
+   outline: none;
+   border: 1px solid #cdcdcd;
+   border-color: rgba(0, 0, 0, .15);
+   background-color: rgba(144, 238, 144, 0.5) !important;
+   font-size: 16px;
+   /*image url je ili apsolutna putanja ili relativna u odnosu na .css - najbolje u istom dir dodati je u resources/dev/webfx/kit/css za GWT*/
+     background-image:url('drop.png');
+     background-repeat: no-repeat;
+     background-position: right center;
+     background-size: contain;
+}
+
+ /*---------- Panel --------------*/
+.panel{
+/* rgba utice samo na Opacity pozadine panela i widgeta */
+	background: rgba(120, 120, 200, .3);
+/* Utice na pozadinu i child widgete */
+/*	background: #f5f9dc; */
+/*	opacity: .4; */
+/* Only text opacity */
+/*	color: rgba(234, 240, 246, 0.8);*/
+/* Border opacity */
+/*  outline: 10px solid rgba(2, 1, 0, .3); */
+  box-shadow: 10px 10px 10px 10px rgba(2, 1, 0, .8);
+}
+
+.ToolTip_html{
+   text-align: left;                  /* centriranje teksta u html */
+   border: 3px solid #000000;         /* crni okvir */
+   font-family: Verdana, sans-serif;  /* Sans-serif 100% safe a Verdana ako je ima - monospace bi bio bolji isto 100% safe */
+   margin-top: 7px;                   /* razmak od vrha HTML komponente na popup- do vrha teksta */
+   margin-bottom: 7px;
+   line-height: 0.5;                  /* razmak izmedju linija kada se razlome 0.5 je polovina od normalnog razmaka koji je 1 */
+   background: rgba(0, 0, 0, 0.8) !important;
+   font-size: 100%;
+   color: white !important;
+      outline: 4px solid black;
+      outline-offset: 2px;
+}
+
+.numbers{
+	font-weight: bold;
+}
+
+.temp{
+	color: yellow;
+}
+
+.rain{
+    color: cyan;
+}
+
+.snow{
+	color: white;
+}

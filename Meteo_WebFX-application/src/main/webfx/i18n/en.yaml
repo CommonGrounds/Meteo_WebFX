@@ -1,0 +1,10 @@
+humidity:
+  text: "Humidity: "
+Wind_Speed:
+  text: "Wind Speed: "
+Wind_Direction:
+  text: "Wind Dir: "
+Pressure:
+  text: "Pressure: "
+Dust:
+  text: "Dust: "

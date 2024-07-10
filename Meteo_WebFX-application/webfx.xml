@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project requiresTimezoneData="true">
+
+    <exported-packages>
+        <source-packages/>
+        <resource-packages/>
+    </exported-packages>
+
+    <dependencies>
+        <used-by-source-modules/>
+    </dependencies>
+
+    <providers>
+        <provider interface="javafx.application.Application">com.java4now.meteo_webfx.Meteo_WebFX</provider>
+    </providers>
+
+</project>

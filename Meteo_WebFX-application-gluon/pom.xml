@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- File managed by WebFX (DO NOT EDIT MANUALLY) -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.java4now</groupId>
+        <artifactId>Meteo_WebFX</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>Meteo_WebFX-application-gluon</artifactId>
+
+    <name>Meteo_WebFX</name>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.java4now</groupId>
+            <artifactId>Meteo_WebFX-application</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.java4now</groupId>
+            <artifactId>Service</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>dev.webfx</groupId>
+            <artifactId>webfx-extras-webtext-peers-openjfx</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>dev.webfx</groupId>
+            <artifactId>webfx-extras-webtext-registry-spi</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>dev.webfx</groupId>
+            <artifactId>webfx-kit-javafxgraphics-openjfx</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>dev.webfx</groupId>
+            <artifactId>webfx-platform-audio-gluon</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>dev.webfx</groupId>
+            <artifactId>webfx-platform-blob-java</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>dev.webfx</groupId>
+            <artifactId>webfx-platform-boot-java</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>dev.webfx</groupId>
+            <artifactId>webfx-platform-console</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>dev.webfx</groupId>
+            <artifactId>webfx-platform-console-java</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>dev.webfx</groupId>
+            <artifactId>webfx-platform-fetch-java</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>dev.webfx</groupId>
+            <artifactId>webfx-platform-os-gluon</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>dev.webfx</groupId>
+            <artifactId>webfx-platform-resource-gluon</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>dev.webfx</groupId>
+            <artifactId>webfx-platform-scheduler-java</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>dev.webfx</groupId>
+            <artifactId>webfx-platform-shutdown-gluon</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>dev.webfx</groupId>
+            <artifactId>webfx-platform-useragent-gluon</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>dev.webfx</groupId>
+            <artifactId>webfx-platform-util-time</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>dev.webfx</groupId>
+            <artifactId>webfx-stack-i18n-ast</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>dev.webfx</groupId>
+            <artifactId>webfx-stack-ui-fxraiser-json</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.gluonhq</groupId>
+                <artifactId>gluonfx-maven-plugin</artifactId>
+                <configuration>
+                    <attachList>
+                        <list>audio</list>
+                        <list>lifecycle</list>
+                        <list>storage</list>
+                        <list>util</list>
+                    </attachList>
+                    <resourcesList>
+                        <list>com/java4now/meteo_webfx/[^/]+$</list>
+                        <list>com/java4now/meteo_webfx/Arrows/[^/]+$</list>
+                        <list>com/java4now/meteo_webfx/Background/[^/]+$</list>
+                        <list>com/java4now/meteo_webfx/mm_api_symbols/[^/]+$</list>
+                        <list>com/java4now/meteo_webfx/sounds/[^/]+$</list>
+                        <list>dev/webfx/kit/css/[^/]+$</list>
+                        <list>dev/webfx/platform/meta/exe/[^/]+$</list>
+                        <list>dev/webfx/stack/i18n/[^/]+$</list>
+                        <list>javafx/scene/control/skin/checkbox/[^/]+$</list>
+                    </resourcesList>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <!-- Redefining the gluon profiles here, so they can be activated when invoking this pom directly -->
+    <!-- Note: activating a profile locally here will trigger the properties defined in webfx-parent -->
+    <profiles>
+        <profile>
+            <id>gluon-desktop</id>            <!-- Will set the Gluon target to host -->
+        </profile>
+        <profile>
+            <id>gluon-android</id>            <!-- Will set the Gluon target to android -->
+        </profile>
+        <profile>
+            <id>gluon-ios</id>            <!-- Will set the Gluon target to ios -->
+        </profile>
+    </profiles>
+
+    <!-- The Gluon plugin is auto-injected here by the auto-plugin-gluon profile defined in webfx-parent -->
+    <!-- but it will be really executed only if Maven is invoked with a Gluon goal (ex: gluonfx:build) -->
+
+</project>
