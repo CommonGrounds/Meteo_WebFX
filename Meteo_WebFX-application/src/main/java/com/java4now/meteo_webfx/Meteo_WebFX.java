@@ -47,7 +47,7 @@ import static com.java4now.meteo_webfx.shared.Forecast_current.Background_audio_
 
 public class Meteo_WebFX extends Application {
 
-    Stage dialog;
+//    Stage dialog;
     Stage dialogParent;
     Scene scene;
     Stage_One_Pane root_pane;
@@ -64,14 +64,16 @@ public class Meteo_WebFX extends Application {
     private Canvas layer2;
     private GraphicsContext context2;
     double old_x = 0;
-    boolean meteo_ok = false,aqi_ok = false;
+    boolean meteo_ok = false, aqi_ok = false;
+    boolean INITIAL_LANG = false;
 
     Audio music;
     Text txt = null;
     HtmlText htmlText = null;
     Image image_wmo_icon;
     ImageView image_view;
-    Label Temperature, Wind_Speed, Wind_Direction, Vlaznost, Pritisak;
+    Button en, fr, de, sr;
+    Label Temperature, Wind_Speed, Wind_Direction, Vlaznost, Pritisak,choose_city_lbl;
     Label EAQI, PM_10, PM_2_5, CO, NO2, SO2, Prasina, UV;
     Label european_aqi_lbl2, pm10_lbl2, pm2_5_lbl2, carbon_monoxide_lbl2, nitrogen_dioxide_lbl2, sulphur_dioxide_lbl2, empty_lbl, empty_lbl2;
     String Meteo_url = "https://api.open-meteo.com/v1/forecast?latitude=44.8782999&longitude=20.6652891&current=temperature_2m,is_day,wind_speed_10m,wind_direction_10m,"
@@ -84,16 +86,25 @@ public class Meteo_WebFX extends Application {
     private final BooleanProperty ip_is_set = new SimpleBooleanProperty(false);
     public static final BooleanProperty geo_is_set = new SimpleBooleanProperty(false);
     public static final StringProperty title_icon = new SimpleStringProperty("GB.png");
-//---------------------- I18N PROPERTIES --------------------------
+    //---------------------- I18N PROPERTIES --------------------------
     public static final StringProperty wind_spd_lbl = new SimpleStringProperty("speed");
     public static final StringProperty wind_dir_lbl = new SimpleStringProperty("dir");
     public static final StringProperty hum_lbl = new SimpleStringProperty("hum");
     public static final StringProperty press_lbl = new SimpleStringProperty("press");
     public static final StringProperty dust_lbl = new SimpleStringProperty("dust");
+    public static final StringProperty city_lbl = new SimpleStringProperty("Choose City");
 
     @Override
     public void start(Stage primaryStage) {
         Service_impl.getCompilerVersion();
+
+        // TODO - i18n more translations
+        I18n.bindI18nTextProperty(wind_spd_lbl, "Wind_Speed"); // samo binding ne koristim translete ovde nego u setNewData()
+        I18n.bindI18nTextProperty(wind_dir_lbl, "Wind_Direction");
+        I18n.bindI18nTextProperty(hum_lbl, "humidity");
+        I18n.bindI18nTextProperty(press_lbl, "Pressure");
+        I18n.bindI18nTextProperty(dust_lbl, "Dust");
+        I18n.bindI18nTextProperty(city_lbl, "ChooseCity");    // city_lbl sam korisio a ostale samo direktno - bez bind
 
         forecast = new Forecast_current("Background/rain"); // default
         forecast_daily = new Forecast_Daily();
@@ -101,6 +112,15 @@ public class Meteo_WebFX extends Application {
         aqi_index = new AQI_Index();
         aqi_hourly = new AQI_Hourly();
         ip_codes = new IPCodes();
+
+        I18n.languageProperty().addListener((observable, oldValue, newValue) -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    setNewData();
+                }
+            });
+        });
 
         dataLoaded.addListener((observable, oldValue, newValue) -> {
             // Only if completed
@@ -110,7 +130,7 @@ public class Meteo_WebFX extends Application {
                     @Override
                     public void run() {
                         setNewData();
-                        Console.log("newValue : " + newValue ); // izvrsava samo kada se postavi dataLoaded.setValue(true);
+                        Console.log("newValue : " + newValue); // izvrsava samo kada se postavi dataLoaded.setValue(true);
                     }
                 });
             }
@@ -131,10 +151,20 @@ public class Meteo_WebFX extends Application {
 //                        Console.log("Meteo_url: " + Meteo_url );
                         choice_box.field.setText(ip_codes.city + " - " + ip_codes.country);
                         String lang = ip_codes.countryCode.toLowerCase();
-                        if (lang.equals("rs") || lang.equals("fr")){
-                            I18n.setLanguage(lang);
-                        }else{
-                            I18n.setLanguage("en");
+                        if (lang.equals("rs") || lang.equals("fr") || lang.equals("de")) {
+                            if(!INITIAL_LANG){
+                                I18n.setLanguage(lang);
+                                if(lang.equals("rs")){sr.setTextFill(Color.LIGHTGREEN);en.setTextFill(Color.WHITE);fr.setTextFill(Color.WHITE);de.setTextFill(Color.WHITE);}
+                                if(lang.equals("fr")){fr.setTextFill(Color.LIGHTGREEN);sr.setTextFill(Color.WHITE);en.setTextFill(Color.WHITE);de.setTextFill(Color.WHITE);}
+                                if(lang.equals("de")){de.setTextFill(Color.LIGHTGREEN);sr.setTextFill(Color.WHITE);fr.setTextFill(Color.WHITE);en.setTextFill(Color.WHITE);}
+                                INITIAL_LANG = true;
+                            }
+                        } else {
+                            if(!INITIAL_LANG){
+                                I18n.setLanguage("en");
+                                en.setTextFill(Color.LIGHTGREEN);sr.setTextFill(Color.WHITE);fr.setTextFill(Color.WHITE);de.setTextFill(Color.WHITE);
+                                INITIAL_LANG = true;
+                            }
                         }
                         doParsing();
                         doAQIParsing();
@@ -190,18 +220,13 @@ public class Meteo_WebFX extends Application {
         image_wmo_icon = new Image(Resource.toUrl("mm_api_symbols/wsymbol_0999_unknown.png", Meteo_WebFX.class), true);   // from resources
         image_view = new ImageView(image_wmo_icon);
 
-        // TODO - i18n
 //        I18n.setLanguage("sr");
         Temperature = new Label("Temp: --");
         Wind_Speed = new Label("Wind Spd: --");
 //        I18nControls.bindI18nProperties(Wind_Speed, "Wind_Speed");
-        I18n.bindI18nTextProperty(wind_spd_lbl, "Wind_Speed");
         Wind_Direction = new Label("Wind dir: --");
-        I18n.bindI18nTextProperty(wind_dir_lbl, "Wind_Direction");
         Vlaznost = new Label("Humidity: --");
-        I18n.bindI18nTextProperty(hum_lbl, "humidity");
         Pritisak = new Label("Pressure: --");
-        I18n.bindI18nTextProperty(press_lbl, "Pressure");
         //lbl.getStyleClass().add("my_label");
 
         VBox vbox_left = new VBox(image_view, Temperature, Wind_Speed, Wind_Direction, Vlaznost, Pritisak);
@@ -215,7 +240,6 @@ public class Meteo_WebFX extends Application {
         NO2 = new Label("NO2: --");
         SO2 = new Label("SO2: --");
         Prasina = new Label("Dust: --");
-        I18n.bindI18nTextProperty(dust_lbl, "Dust");
         UV = new Label("UV Index: --");
         //lbl.getStyleClass().add("my_label");
 
@@ -262,14 +286,14 @@ public class Meteo_WebFX extends Application {
             public void handle(ActionEvent event) {
                 // TODO GRAPH
                 if (OperatingSystem.isDesktop() && !Service_impl.isMaximized(primaryStage) || OperatingSystem.isMobile()) {
-                    if(Objects.equals(forecast_graph_btn.getText(), "Forecast")){
+                    if (Objects.equals(forecast_graph_btn.getText(), "Forecast")) {
                         primaryStage.setWidth(800);
                         primaryStage.setHeight(400);
                         border_pane.setVisible(false);
                         forecast_graph_btn.setText("Current");
                         layer1.setVisible(true);
                         layer2.setVisible(true);
-                    }else{
+                    } else {
                         primaryStage.setWidth(400);
                         primaryStage.setHeight(800);
                         border_pane.setVisible(true);
@@ -277,7 +301,7 @@ public class Meteo_WebFX extends Application {
                         layer1.setVisible(false);
                         layer2.setVisible(false);
                     }
-                }else {
+                } else {
 //                    for(int i = 0;i<10;i++){Service_impl.debugger();Console.log("i: " + i);} // webfx service primer za JS debugger keyword
 //                  GWT
                 }
@@ -323,12 +347,53 @@ public class Meteo_WebFX extends Application {
         handleLayers();
 
         VBox toolTip_Vbox = new VBox(5);
-        Label choose_city_lbl = new Label("Choose City");
+        choose_city_lbl = new Label("ChooseCity");
 //        choose_city_lbl.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 18));
         choose_city_lbl.getStyleClass().add("city_label");
-        HBox choice_group = new HBox(choice_image,choice_box,choose_city_lbl);
+        HBox choice_group = new HBox(choice_image, choice_box, choose_city_lbl);
         choice_group.setSpacing(5);
         choice_group.setAlignment(Pos.TOP_CENTER);
+
+        en = new Button("EN");
+        en.getStyleClass().add("settings_button"); // ima efekta samo dok se ne pozove neka node style funk. koja ponistava css kao u handle()
+     //   en.getStyleClass().add("tooltip");
+        en.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                I18n.setLanguage("en");
+                en.setTextFill(Color.LIGHTGREEN);sr.setTextFill(Color.WHITE);fr.setTextFill(Color.WHITE);de.setTextFill(Color.WHITE);
+            }
+        });
+
+        fr = new Button("FR");
+        fr.getStyleClass().add("settings_button");
+        fr.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                I18n.setLanguage("fr");
+                fr.setTextFill(Color.LIGHTGREEN);en.setTextFill(Color.WHITE);sr.setTextFill(Color.WHITE);de.setTextFill(Color.WHITE);
+            }
+        });
+
+        de = new Button("DE");
+        de.getStyleClass().add("settings_button");
+        de.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                I18n.setLanguage("de");
+                de.setTextFill(Color.LIGHTGREEN);en.setTextFill(Color.WHITE);fr.setTextFill(Color.WHITE);sr.setTextFill(Color.WHITE);
+            }
+        });
+
+        sr = new Button("SR");
+        sr.getStyleClass().add("settings_button");
+        sr.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                I18n.setLanguage("rs");
+                sr.setTextFill(Color.LIGHTGREEN);en.setTextFill(Color.WHITE);fr.setTextFill(Color.WHITE);de.setTextFill(Color.WHITE);
+            }
+        });
 
         Button audio_btn = new Button("Audio on");
         audio_btn.getStyleClass().add("my_button");
@@ -344,8 +409,12 @@ public class Meteo_WebFX extends Application {
             }
         });
 
-        root_pane = new Stage_One_Pane(imageView, border_pane, layer1,layer2, forecast_graph_btn, toolTip_Vbox,forecast,forecast_daily,
-                forecast_hourly,aqi_hourly,choice_group,audio_btn);
+        HBox settings_pane = new HBox(en, fr, de, sr, audio_btn);
+        settings_pane.setSpacing(8);
+        settings_pane.setAlignment(Pos.BOTTOM_CENTER);
+
+        root_pane = new Stage_One_Pane(imageView, border_pane, layer1, layer2, forecast_graph_btn, toolTip_Vbox, forecast, forecast_daily,
+                forecast_hourly, aqi_hourly, choice_group, settings_pane);
 //        ScalePane root = new ScalePane(pane);
 
         scene = new Scene(root_pane, 400, 800);
@@ -354,15 +423,20 @@ public class Meteo_WebFX extends Application {
         // set the scene
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        if (UserAgent.isBrowser()) {
+            getIPCodes(); // Kada se pribavi country i city onda ip_is_set property aktivira forecast fetch
+        }
     }
 
 
     //--------------------------------------------------
     private void setNewData() {
+        choose_city_lbl.setText(city_lbl.get()/*I18n.getI18nText("ChooseCity")*/);
         if (UserAgent.isBrowser()) {
             htmlText.setText("<center>" + forecast.latitude + " ° Lat, " + forecast.longitude
-                    + " ° Lon<br>" + forecast.elevation + "m Altitude" + ", Date: "
-                    + forecast.time.substring(0, 10) + "<br>Time " + forecast.time.substring(11, 16) + " " + "in "
+                    + " ° Lon<br>" + forecast.elevation + "m " + I18n.getI18nText("Altitude") + ", " + I18n.getI18nText("Date")
+                    + forecast.time.substring(0, 10) + "<br>" + I18n.getI18nText("Time") + forecast.time.substring(11, 16) + " " + I18n.getI18nText("In")
                     + forecast.timezone + " (" + forecast.timezone_abbreviation.substring(0, 4)
                     + "+" + (forecast.utc_offset_seconds / 3600) + " h)<br>"
                     + forecast.weather_code_description + "</center>");
@@ -370,8 +444,8 @@ public class Meteo_WebFX extends Application {
         } else {
             txt.setText(forecast.latitude + " ° Širine, " + forecast.longitude
                     + " ° Dužine\n" + forecast.elevation + "m Nadmorske visine" + "\nDatum "
-                    + forecast.time.substring(0, 10) + ", Vreme " + forecast.time.substring(11, 16) + " " + "\nu "
-                    + forecast.timezone + " (" + forecast.timezone_abbreviation.substring(0, 3)
+                    + (forecast.time == null ? "Update":forecast.time.substring(0, 10)) + ", Vreme " + (forecast.time == null ? "Update":forecast.time.substring(11, 16)) + " " + "\nu "
+                    + forecast.timezone + " (" + (forecast.timezone_abbreviation == null ? "Update":forecast.timezone_abbreviation.substring(0, 3))
                     + "+" + (forecast.utc_offset_seconds / 3600) + " h)\n"
                     + forecast.weather_code_description);
         }
@@ -451,9 +525,6 @@ public class Meteo_WebFX extends Application {
         image_view.setImage(image_wmo_icon);
 
         dataLoaded.setValue(false);
-
-        // TODO I18n
-//        ResourceBundle lngBndl = ResourceBundle.getBundle("bundles.LangBundle", new Locale("en", "EN"));
     }
 
 
@@ -474,7 +545,7 @@ public class Meteo_WebFX extends Application {
                                 forecast_daily.parseData(text);
                                 forecast_hourly.parseData(text);
 // u listeneru preko Platform.runLater() jer je Fetch non FX process thread ( vazi samo za javafx, Java Script radi i bez toga a moze i ovako )
-                                if(aqi_ok && meteo_ok ) {
+                                if (aqi_ok && meteo_ok) {
                                     dataLoaded.setValue(true); // posle AQI
                                     meteo_ok = false;
                                     aqi_ok = false;
@@ -501,7 +572,7 @@ public class Meteo_WebFX extends Application {
                                 aqi_ok = aqi_index.parseData(text);
                                 aqi_hourly.parseData(text);
 // u listeneru preko Platform.runLater() jer je Fetch non FX process thread ( vazi samo za javafx, Java Script radi i bez toga a moze i ovako )
-                                if(meteo_ok && aqi_ok ) {
+                                if (meteo_ok && aqi_ok) {
                                     dataLoaded.setValue(true); // posle AQI
                                     meteo_ok = false;
                                     aqi_ok = false;
@@ -538,7 +609,7 @@ http://ip-api.com/json/?fields=61439
                             .onFailure(error -> Console.log("Json IP_API failure: " + error))
                             .onSuccess(text -> {
 //                                Console.log(text);
-                                boolean ok = ip_codes.parseData(text, title_icon,ip_is_set);
+                                boolean ok = ip_codes.parseData(text, title_icon, ip_is_set);
                                 if (ok) {
                                     ip_is_set.setValue(true);
                                 }
@@ -574,12 +645,12 @@ http://ip-api.com/json/?fields=61439
             @Override
             public void handle(MouseEvent event) {
 
-                if(root_pane.DATA_IS_FETCHED){
-                    double hour = (double)forecast_hourly.time.length / (layer2.getWidth() / event.getX());
-                    double temp = forecast_hourly.temperature[(int)hour];
-                    double snow_fall = forecast_hourly.snowfall[(int)hour];
-                    double rain_fall = forecast_hourly.rain[(int)hour];
-                    double uv_index_h = aqi_hourly.uv_index[(int)hour];
+                if (root_pane.DATA_IS_FETCHED) {
+                    double hour = (double) forecast_hourly.time.length / (layer2.getWidth() / event.getX());
+                    double temp = forecast_hourly.temperature[(int) hour];
+                    double snow_fall = forecast_hourly.snowfall[(int) hour];
+                    double rain_fall = forecast_hourly.rain[(int) hour];
+                    double uv_index_h = aqi_hourly.uv_index[(int) hour];
                     Date date_tooltip = new Date();
                     int all_points = forecast_hourly.time.length;
                     double one_hour_width = (layer2.getWidth() / all_points);
@@ -596,21 +667,21 @@ http://ip-api.com/json/?fields=61439
                         y = layer2.getLayoutY() + event.getY();
                     }
 
-                    context2.clearRect(old_x-2, 0, 4, layer2.getHeight() - 38); // brisanje prethodne linije
+                    context2.clearRect(old_x - 2, 0, 4, layer2.getHeight() - 38); // brisanje prethodne linije
                     context2.beginPath();
                     context2.setStroke(Color.web("#FFFFFF")); // white
                     context2.setLineWidth(2);
-                    context2.moveTo(one_hour_width * (int)hour, 0);
-                    context2.lineTo(one_hour_width * (int)hour, layer2.getHeight() - 40);
-                    old_x = one_hour_width * (int)hour; // skladistim prethodnu vrednost za x
+                    context2.moveTo(one_hour_width * (int) hour, 0);
+                    context2.lineTo(one_hour_width * (int) hour, layer2.getHeight() - 40);
+                    old_x = one_hour_width * (int) hour; // skladistim prethodnu vrednost za x
                     context2.stroke();
                     context2.closePath();
 
-                    if( (y - layer2.getLayoutY()) < 20 || y > layer2.getLayoutY() + layer2.getHeight() - 20){
-                        context2.clearRect(old_x-2, 0, 4, layer2.getHeight() - 38);
+                    if ((y - layer2.getLayoutY()) < 20 || y > layer2.getLayoutY() + layer2.getHeight() - 20) {
+                        context2.clearRect(old_x - 2, 0, 4, layer2.getHeight() - 38);
                         root_pane.hide_ToolTip();
                     } else {
-                        root_pane.show_ToolTip(x, y,hour,date_tooltip.toString(),temp,rain_fall,snow_fall,uv_index_h);
+                        root_pane.show_ToolTip(x, y, hour, date_tooltip.toString(), temp, rain_fall, snow_fall, uv_index_h);
                     }
                 }
             }

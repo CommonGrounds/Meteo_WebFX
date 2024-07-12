@@ -54,6 +54,18 @@
   -fx-text-fill: #888;
 }
 
+.settings_button{
+    -fx-background-color:none;
+    -fx-border-color: none;
+/*    -fx-text-fill:white; */
+}
+
+.settings_button:hover{
+/*    -fx-background-color: none; */
+/*    -fx-border-color: none; */
+/*    -fx-text-fill:green; */
+}
+
 .choice_list {
  /*   -fx-background-color:white; */
     -fx-background-color: rgba(120, 120, 200, 0.5) !important;

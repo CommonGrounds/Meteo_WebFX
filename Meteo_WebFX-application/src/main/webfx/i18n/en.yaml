@@ -8,3 +8,13 @@ Pressure:
   text: "Pressure: "
 Dust:
   text: "Dust: "
+Altitude:
+  text: "Altitude"
+Date:
+  text: "Date: "
+Time:
+  text: "Time "
+In:
+  text: "in "
+ChooseCity:
+  text: "Choose City"

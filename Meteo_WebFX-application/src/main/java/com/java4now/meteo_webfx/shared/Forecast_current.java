@@ -19,6 +19,8 @@ public class Forecast_current {
     public Forecast_current(String image_name){
         super();
         Background_image_name = Old_Background_image_name = image_name;
+        Background_audio_name = "nature-birds-singing-217212.mp3";
+        WMO_image_name = "wsymbol_0999_unknown.png";
     }
 
     public boolean parseData(String text) {

@@ -42,7 +42,7 @@ public class Stage_One_Pane extends Pane {
     HtmlText html_text;
     Web_Text web_text;
     Button forecast_graph_btn;
-    Button audio_btn;
+    HBox settings_pane;
     Forecast_current forecast;
     Forecast_Daily forecast_daily;
     Forecast_Hourly forecast_hourly;
@@ -59,14 +59,14 @@ public class Stage_One_Pane extends Pane {
     String razmak_uv = "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp";
 
     public Stage_One_Pane(ImageView imageView, BorderPane main_pane, Canvas layer1, Canvas layer2, Button forecast_graph_btn, VBox toolTip_Vbox,
-                          Forecast_current forecast, Forecast_Daily forecast_daily, Forecast_Hourly forecast_hourly, AQI_Hourly aqi_hourly, HBox choice_group,Button audio_btn){
-        super(imageView,main_pane,layer1,layer2,forecast_graph_btn,toolTip_Vbox,choice_group,audio_btn);
+                          Forecast_current forecast, Forecast_Daily forecast_daily, Forecast_Hourly forecast_hourly, AQI_Hourly aqi_hourly, HBox choice_group,HBox settings_pane){
+        super(imageView,main_pane,layer1,layer2,forecast_graph_btn,toolTip_Vbox,choice_group,settings_pane);
         this.main_pane = main_pane;
         this.image_view = imageView;
         this.layer_1 = layer1;
         this.layer_2 = layer2;
         this.forecast_graph_btn = forecast_graph_btn;
-        this.audio_btn = audio_btn;
+        this.settings_pane = settings_pane;
         this.toolTip_Vbox = toolTip_Vbox;
         this.forecast = forecast;
         this.forecast_hourly = forecast_hourly;
@@ -224,8 +224,12 @@ public class Stage_One_Pane extends Pane {
             IS_MOBILE_VIEW_PORTRAIT = true;
         }
 
-        audio_btn.setLayoutX(getWidth() - audio_btn.getWidth() - 10);
-        audio_btn.setLayoutY(getHeight() - audio_btn.getHeight() - 10 );
+        settings_pane.setLayoutX(getWidth() - settings_pane.getWidth() - 10);
+        if (UserAgent.isBrowser()){
+            settings_pane.setLayoutY(10);
+        }else{
+            settings_pane.setLayoutY(getHeight() - settings_pane.getHeight() - 10 );
+        }
 
         if(DATA_IS_FETCHED && !IS_MOBILE_VIEW_PORTRAIT && !toolTip_Vbox.isVisible()){
             choice_group.setLayoutX(10);

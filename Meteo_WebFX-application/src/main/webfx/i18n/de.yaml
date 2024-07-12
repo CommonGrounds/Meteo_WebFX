@@ -1,0 +1,20 @@
+humidity:
+  text: "Feuchtigkeit: "
+Wind_Speed:
+  text: "Windgeschwindigkeit: "
+Wind_Direction:
+  text: "Windrichtung: "
+Pressure:
+  text: "Druck: "
+Dust:
+  text: "Staub: "
+Altitude:
+  text: "Höhe"
+Date:
+  text: "Datum: "
+Time:
+  text: "Zeit "
+In:
+  text: "im "
+ChooseCity:
+  text: "Wählen Sie Stadt"

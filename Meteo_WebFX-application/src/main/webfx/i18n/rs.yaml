@@ -8,3 +8,13 @@ Pressure:
       text: "Pritisak: "
 Dust:
       text: "Prasina: "
+Altitude:
+      text: "Visine"
+Date:
+      text: "Datum: "
+Time:
+      text: "Vreme "
+In:
+      text: "u "
+ChooseCity:
+      text: "Izaberi Grad"

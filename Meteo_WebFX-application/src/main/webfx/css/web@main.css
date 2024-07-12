@@ -45,9 +45,23 @@ fx-button > fx-background {
   cursor: default;
   color: #888;
 }
+
 .my_button[disabled]:hover {
   border: 1px outset #ccc;
 }
+
+.settings_button{
+    color:white;
+}
+
+.settings_button:hover{
+    color:green;
+}
+/* nema efekta */
+.settings_button:hover::after{
+    color:red;
+}
+
 /*----------------------------------*/
 .label{
     background-color:transparent;
