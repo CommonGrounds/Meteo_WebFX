@@ -18,3 +18,15 @@ In:
   text: "dans "
 ChooseCity:
   text: "Choisir la ville"
+Save_Settings:
+  text: "Enregistrer les paramètres"
+Update:
+  text: "Mise à jour"
+MONDAY: "Lundi"
+TUESDAY: "Mardi"
+WEDNESDAY: "Mercredi"
+THURSDAY: "Jeudi"
+FRIDAY: "Vendredi"
+SATURDAY: "Samedi"
+SUNDAY: "Dimanche"
+TODAY: "Aujourd'hui"

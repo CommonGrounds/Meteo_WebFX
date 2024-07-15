@@ -240,6 +240,11 @@
     <source path="dev/webfx/platform/shutdown/spi/impl"/>
     <!--========================< webfx-platform-shutdown-gwt-j2cl >========================-->
     <source path="dev/webfx/platform/shutdown/spi/impl/gwtj2cl"/>
+    <!--=============================< webfx-platform-storage >=============================-->
+    <source path="dev/webfx/platform/storage"/>
+    <source path="dev/webfx/platform/storage/spi"/>
+    <!--========================< webfx-platform-storage-gwt-j2cl >=========================-->
+    <source path="dev/webfx/platform/storage/spi/impl/gwtj2cl"/>
     <!--===========================< webfx-platform-uischeduler >===========================-->
     <source path="dev/webfx/platform/uischeduler"/>
     <source path="dev/webfx/platform/uischeduler/spi"/>

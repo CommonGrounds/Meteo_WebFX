@@ -18,3 +18,15 @@ In:
       text: "u "
 ChooseCity:
       text: "Izaberi Grad"
+Save_Settings:
+      text: "Sačuvaj"
+Update:
+      text: "Ažuriraj"
+MONDAY: "Ponedeljak"
+TUESDAY: "Utorak"
+WEDNESDAY: "Sreda"
+THURSDAY: "Četvrtak"
+FRIDAY: "Petak"
+SATURDAY: "Subota"
+SUNDAY: "Nedelja"
+TODAY: "Danas"

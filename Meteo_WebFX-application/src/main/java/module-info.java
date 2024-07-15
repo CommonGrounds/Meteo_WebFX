@@ -18,7 +18,9 @@ module Meteo_WebFX.application {
     requires webfx.platform.os;
     requires webfx.platform.resource;
     requires webfx.platform.shutdown;
+    requires webfx.platform.storage;
     requires webfx.platform.useragent;
+    requires webfx.platform.util;
     requires webfx.stack.i18n;
 
     // Exported packages

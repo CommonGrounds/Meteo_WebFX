@@ -25,6 +25,7 @@ public class Custom_ChoiceBox extends VBox {
     ArrayList<Button> btn_list = new ArrayList<>();
     Geocode geocode = new Geocode();
     public static double geocode_lat, geocode_lon;
+    public static String choosen_country_code;
     String Geocoding_url = "https://geocoding-api.open-meteo.com/v1/search?name=pancevo";
     String old_geocoding = "?name=pancevo";
     String geocode_result;
@@ -45,6 +46,7 @@ public class Custom_ChoiceBox extends VBox {
                     geocode_lat = geocode.lat_list.get(finalI);
                     geocode_lon = geocode.lon_list.get(finalI);
                     title_icon.set("icon-24px/" + geocode.country_code_list.get(finalI)   + ".png");
+                    choosen_country_code = geocode.country_code_list.get(finalI);
                     box.getChildren().clear();
                     box.setVisible(false);
                     geo_is_set.setValue(true);
@@ -75,6 +77,7 @@ public class Custom_ChoiceBox extends VBox {
                     Console.log("enter");
                     field.setText(btn_list.get(finalI).getText());
                     title_icon.set("icon-24px/" + geocode.country_code_list.get(finalI)   + ".png");
+                    choosen_country_code = geocode.country_code_list.get(finalI);
                     geocode_lat = geocode.lat_list.get(finalI);
                     geocode_lon = geocode.lon_list.get(finalI);
                     Console.log(geocode.name_list.get(finalI) + "," + geocode_lat + "," + geocode.country_list.get(finalI));

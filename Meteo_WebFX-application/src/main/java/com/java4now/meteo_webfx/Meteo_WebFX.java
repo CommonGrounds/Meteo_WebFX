@@ -8,7 +8,11 @@ import dev.webfx.platform.console.Console;
 import dev.webfx.platform.fetch.Fetch;
 import dev.webfx.platform.os.OperatingSystem;
 import dev.webfx.platform.resource.Resource;
+import dev.webfx.platform.storage.LocalStorage;
 import dev.webfx.platform.useragent.UserAgent;
+import dev.webfx.platform.util.Booleans;
+import dev.webfx.platform.util.Numbers;
+import dev.webfx.platform.util.Strings;
 import dev.webfx.stack.i18n.I18n;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -30,6 +34,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
@@ -40,8 +45,7 @@ import service.Service_impl;
 import java.util.Date;
 import java.util.Objects;
 
-import static com.java4now.meteo_webfx.Custom_ChoiceBox.geocode_lat;
-import static com.java4now.meteo_webfx.Custom_ChoiceBox.geocode_lon;
+import static com.java4now.meteo_webfx.Custom_ChoiceBox.*;
 import static com.java4now.meteo_webfx.shared.Forecast_current.Background_audio_name;
 
 
@@ -60,14 +64,23 @@ public class Meteo_WebFX extends Application {
     IPCodes ip_codes;
     Custom_ChoiceBox choice_box = new Custom_ChoiceBox();
     ImageView choice_image = new ImageView();
+    Button Update;
+    Button save;
     private Canvas layer1;
     private Canvas layer2;
     private GraphicsContext context2;
     double old_x = 0;
     boolean meteo_ok = false, aqi_ok = false;
     boolean INITIAL_LANG = false;
+    boolean FAVORITES_SAVED = false;
+    String Saved_Language = "default";
+    String fav_city,fav_country_code;
+    double fav_city_lat, fav_city_lon;
+    boolean fav_audio_set = true;
+    Paint HOVER_COLOR;
 
     Audio music;
+    Button audio_btn;
     Text txt = null;
     HtmlText htmlText = null;
     Image image_wmo_icon;
@@ -83,6 +96,7 @@ public class Meteo_WebFX extends Application {
             + "nitrogen_dioxide,sulphur_dioxide,dust,uv_index&hourly=uv_index&timezone=auto&forecast_days=7";
 
     private final BooleanProperty dataLoaded = new SimpleBooleanProperty(false);
+    private final BooleanProperty storage_loading = new SimpleBooleanProperty(false);
     private final BooleanProperty ip_is_set = new SimpleBooleanProperty(false);
     public static final BooleanProperty geo_is_set = new SimpleBooleanProperty(false);
     public static final StringProperty title_icon = new SimpleStringProperty("GB.png");
@@ -104,7 +118,7 @@ public class Meteo_WebFX extends Application {
         I18n.bindI18nTextProperty(hum_lbl, "humidity");
         I18n.bindI18nTextProperty(press_lbl, "Pressure");
         I18n.bindI18nTextProperty(dust_lbl, "Dust");
-        I18n.bindI18nTextProperty(city_lbl, "ChooseCity");    // city_lbl sam korisio a ostale samo direktno - bez bind
+        I18n.bindI18nTextProperty(city_lbl, "ChooseCity");    // city_lbl sam koristio kao bind a ostale samo direktno - bez bind
 
         forecast = new Forecast_current("Background/rain"); // default
         forecast_daily = new Forecast_Daily();
@@ -122,6 +136,36 @@ public class Meteo_WebFX extends Application {
             });
         });
 
+        storage_loading.addListener((observable, oldValue, newValue) -> {
+            // Only if completed
+            if (newValue) {
+                //  in javaFX only the FX thread can modify the UI elements
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(fav_city_lat != 0){
+                            Console.log("After loadState()");
+                            ip_codes.lon = fav_city_lon;
+                            ip_codes.lat = fav_city_lat;
+                            String[] str = fav_city.split(" - ");
+                            ip_codes.city = str[0];
+                            ip_codes.country = str[1];
+                            ip_codes.countryCode = Saved_Language;
+                            title_icon.set("icon-24px/" + fav_country_code.toUpperCase()   + ".png");
+                            FAVORITES_SAVED = true;
+                            ip_is_set.setValue(true);
+                        }
+
+                        if (!FAVORITES_SAVED) {
+                            Console.log("getIPCodes()");
+                            getIPCodes(); // Kada se pribavi country i city onda ip_is_set property aktivira forecast fetch
+                        }
+                        storage_loading.setValue(false);
+                    }
+                });
+            }
+        });
+
         dataLoaded.addListener((observable, oldValue, newValue) -> {
             // Only if completed
             if (newValue) {
@@ -130,7 +174,7 @@ public class Meteo_WebFX extends Application {
                     @Override
                     public void run() {
                         setNewData();
-                        Console.log("newValue : " + newValue); // izvrsava samo kada se postavi dataLoaded.setValue(true);
+//                        Console.log("newValue : " + newValue); // izvrsava samo kada se postavi dataLoaded.setValue(true);
                     }
                 });
             }
@@ -150,7 +194,12 @@ public class Meteo_WebFX extends Application {
                                 + "nitrogen_dioxide,sulphur_dioxide,dust,uv_index&hourly=uv_index&timezone=auto&forecast_days=7";
 //                        Console.log("Meteo_url: " + Meteo_url );
                         choice_box.field.setText(ip_codes.city + " - " + ip_codes.country);
-                        String lang = ip_codes.countryCode.toLowerCase();
+                        String lang;
+                        if(Saved_Language.length() == 2){
+                            lang = Saved_Language;
+                        }else{
+                            lang = ip_codes.countryCode.toLowerCase();
+                        }
                         if (lang.equals("rs") || lang.equals("fr") || lang.equals("de")) {
                             if(!INITIAL_LANG){
                                 I18n.setLanguage(lang);
@@ -269,7 +318,7 @@ public class Meteo_WebFX extends Application {
         }
         hbox_center.setAlignment(Pos.CENTER);
 
-        Button Update = new Button("Update");
+        Update = new Button("Update");
         Update.getStyleClass().add("my_button");
         Button forecast_graph_btn = new Button("Forecast");
         forecast_graph_btn.getStyleClass().add("my_button");
@@ -277,7 +326,8 @@ public class Meteo_WebFX extends Application {
         Update.setMinWidth(50);
         Update.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
-                getIPCodes(); // Kada se pribavi country i city onda ip_is_set property aktivira forecast fetch
+                storage_loading.setValue(true);
+//                getIPCodes(); // Kada se pribavi country i city onda ip_is_set property aktivira forecast fetch
             }
         });
 
@@ -362,6 +412,20 @@ public class Meteo_WebFX extends Application {
             public void handle(MouseEvent e) {
                 I18n.setLanguage("en");
                 en.setTextFill(Color.LIGHTGREEN);sr.setTextFill(Color.WHITE);fr.setTextFill(Color.WHITE);de.setTextFill(Color.WHITE);
+                HOVER_COLOR = en.getTextFill();
+            }
+        });
+        en.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                HOVER_COLOR = en.getTextFill();
+                en.setTextFill(Color.GREEN);;
+            }
+        });
+        en.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                en.setTextFill(HOVER_COLOR);
             }
         });
 
@@ -372,6 +436,20 @@ public class Meteo_WebFX extends Application {
             public void handle(MouseEvent e) {
                 I18n.setLanguage("fr");
                 fr.setTextFill(Color.LIGHTGREEN);en.setTextFill(Color.WHITE);sr.setTextFill(Color.WHITE);de.setTextFill(Color.WHITE);
+                HOVER_COLOR = fr.getTextFill();
+            }
+        });
+        fr.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                HOVER_COLOR = fr.getTextFill();
+                fr.setTextFill(Color.GREEN);;
+            }
+        });
+        fr.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                fr.setTextFill(HOVER_COLOR);
             }
         });
 
@@ -382,6 +460,20 @@ public class Meteo_WebFX extends Application {
             public void handle(MouseEvent e) {
                 I18n.setLanguage("de");
                 de.setTextFill(Color.LIGHTGREEN);en.setTextFill(Color.WHITE);fr.setTextFill(Color.WHITE);sr.setTextFill(Color.WHITE);
+                HOVER_COLOR = de.getTextFill();
+            }
+        });
+        de.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                HOVER_COLOR = de.getTextFill();
+                de.setTextFill(Color.GREEN);;
+            }
+        });
+        de.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                de.setTextFill(HOVER_COLOR);
             }
         });
 
@@ -392,10 +484,24 @@ public class Meteo_WebFX extends Application {
             public void handle(MouseEvent e) {
                 I18n.setLanguage("rs");
                 sr.setTextFill(Color.LIGHTGREEN);en.setTextFill(Color.WHITE);fr.setTextFill(Color.WHITE);de.setTextFill(Color.WHITE);
+                HOVER_COLOR = sr.getTextFill();
+            }
+        });
+        sr.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                HOVER_COLOR = sr.getTextFill();
+                sr.setTextFill(Color.GREEN);;
+            }
+        });
+        sr.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                sr.setTextFill(HOVER_COLOR);
             }
         });
 
-        Button audio_btn = new Button("Audio on");
+        audio_btn = new Button("Audio on");
         audio_btn.getStyleClass().add("my_button");
         audio_btn.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
@@ -409,9 +515,21 @@ public class Meteo_WebFX extends Application {
             }
         });
 
-        HBox settings_pane = new HBox(en, fr, de, sr, audio_btn);
-        settings_pane.setSpacing(8);
-        settings_pane.setAlignment(Pos.BOTTOM_CENTER);
+        HBox  lang_audio_pane = new HBox(en, fr, de, sr, audio_btn);
+        lang_audio_pane.setSpacing(8);
+        lang_audio_pane.setAlignment(Pos.BOTTOM_CENTER);
+
+        save = new Button("Save Settings");
+        save.getStyleClass().add("my_button");
+        save.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent event) {
+                saveState();
+            }
+        });
+
+        VBox settings_pane = new VBox(lang_audio_pane,save);
+        settings_pane.setSpacing(20);
+        settings_pane.setAlignment(Pos.BASELINE_RIGHT);
 
         root_pane = new Stage_One_Pane(imageView, border_pane, layer1, layer2, forecast_graph_btn, toolTip_Vbox, forecast, forecast_daily,
                 forecast_hourly, aqi_hourly, choice_group, settings_pane);
@@ -424,14 +542,14 @@ public class Meteo_WebFX extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        if (UserAgent.isBrowser()) {
-            getIPCodes(); // Kada se pribavi country i city onda ip_is_set property aktivira forecast fetch
-        }
+        loadState();
     }
 
 
     //--------------------------------------------------
     private void setNewData() {
+        Update.setText(I18n.getI18nText("Update"));
+        save.setText(I18n.getI18nText("Save_Settings"));
         choose_city_lbl.setText(city_lbl.get()/*I18n.getI18nText("ChooseCity")*/);
         if (UserAgent.isBrowser()) {
             htmlText.setText("<center>" + forecast.latitude + " ° Lat, " + forecast.longitude
@@ -519,7 +637,11 @@ public class Meteo_WebFX extends Application {
         music = AudioService.loadMusic(Resource.toUrl("sounds/" + Background_audio_name, Meteo_WebFX.class));
         music.setLooping(true);
         music.setVolume(1);
-        music.play();
+        if(fav_audio_set && audio_btn.getText().contains("on")){
+            music.play();
+        }else{
+            audio_btn.setText("audio off");
+        }
 
         image_wmo_icon = new Image(Resource.toUrl("mm_api_symbols/" + forecast.WMO_image_name, Meteo_WebFX.class), true);
         image_view.setImage(image_wmo_icon);
@@ -617,6 +739,60 @@ http://ip-api.com/json/?fields=61439
 //                                dataLoaded.setValue(true);
                             });
                 });
+    }
+
+
+    //---------------------------------------
+    private void loadState() {
+//        start_counter = Numbers.intValue(LocalStorage.getItem("start_counter"));
+        Saved_Language = Strings.asString(LocalStorage.getItem("Saved_Language"));
+        if(Saved_Language == null){
+            Saved_Language = "default";
+        }
+        fav_country_code = Strings.asString(LocalStorage.getItem("fav_country_code"));
+        fav_city = Strings.asString(LocalStorage.getItem("fav_city"));
+        fav_city_lat = Numbers.doubleValue(LocalStorage.getItem("fav_city_lat"));
+        fav_city_lon = Numbers.doubleValue(LocalStorage.getItem("fav_city_lon"));
+        try{
+            if(Strings.asString(LocalStorage.getItem("fav_audio_set")).equals("false")){
+                fav_audio_set = false;
+            }else{
+                fav_audio_set = true;
+            }
+        }catch(Exception e){
+            fav_audio_set = true;
+        }
+//        OSName = Strings.asString(LocalStorage.getItem("OSName"));
+//        isLinux = Booleans.booleanValue(LocalStorage.getItem("isLinux"));
+//        dev.webfx.platform.console.Console.log("Saved_Language: " + Saved_Language + "\nlat:" + fav_city_lat + "\nlon:" +
+//                fav_city_lon + "\ncity:" + fav_city + "\ncountry_code:" + fav_country_code + "\nfav_audio_set:" + fav_audio_set);
+        storage_loading.setValue(Booleans.booleanValue(LocalStorage.getItem("isSaved")));
+    }
+
+    private void saveState() {
+        if(geocode_lat == 0){
+            LocalStorage.setItem("Saved_Language", String.valueOf(I18n.getLanguage()));
+            if(choosen_country_code != null && choosen_country_code.length() == 2){
+                LocalStorage.setItem("fav_country_code", choosen_country_code);
+            }
+            LocalStorage.setItem("fav_audio_set", String.valueOf(music.isPlaying()));
+            LocalStorage.setItem("isSaved", String.valueOf(true));
+            return;
+        }
+//        LocalStorage.removeItem("OSFamily"); // brise samo taj key
+//        LocalStorage.clear(); // brise sve
+        LocalStorage.setItem("Saved_Language", String.valueOf(I18n.getLanguage()));
+        fav_city_lat = geocode_lat;
+        fav_city_lon = geocode_lon;
+        fav_country_code = choosen_country_code;//ip_codes.countryCode;  // TODO
+//        dev.webfx.platform.console.Console.log("fav_country_code: " + fav_country_code );
+        fav_city = choice_box.field.getText();
+        LocalStorage.setItem("fav_city", fav_city);
+        LocalStorage.setItem("fav_country_code", fav_country_code);
+        LocalStorage.setItem("fav_city_lat", String.valueOf(fav_city_lat));
+        LocalStorage.setItem("fav_city_lon", String.valueOf(fav_city_lon));
+        LocalStorage.setItem("fav_audio_set", String.valueOf(music.isPlaying()));
+        LocalStorage.setItem("isSaved", String.valueOf(true));
     }
 
 

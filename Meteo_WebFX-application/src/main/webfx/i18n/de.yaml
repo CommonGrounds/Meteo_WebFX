@@ -18,3 +18,15 @@ In:
   text: "im "
 ChooseCity:
   text: "Wählen Sie Stadt"
+Save_Settings:
+  text: "Einstellungen speichern"
+Update:
+  text: "Aktualisieren"
+MONDAY: "Montag"
+TUESDAY: "Dienstag"
+WEDNESDAY: "Mittwoch"
+THURSDAY: "Donnerstag"
+FRIDAY: "Freitag"
+SATURDAY: "Samstag"
+SUNDAY: "Sonntag"
+TODAY: "Heute"

@@ -18,3 +18,15 @@ In:
   text: "in "
 ChooseCity:
   text: "Choose City"
+Save_Settings:
+  text: "Save Settings"
+Update:
+  text: "Update"
+MONDAY: "Monday"
+TUESDAY: "Tuesday"
+WEDNESDAY: "Wednesday"
+THURSDAY: "Thursday"
+FRIDAY: "Friday"
+SATURDAY: "Saturday"
+SUNDAY: "Sunday"
+TODAY: "Today"

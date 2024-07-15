@@ -33,6 +33,12 @@ public class Stage_One_Pane extends Pane {
     Image image_rain_rot = new Image(Resource.toUrl("Background/rain" + rotate_image + ".jpg", Meteo_WebFX.class), true);
     Image image_sunny = new Image(Resource.toUrl("Background/sunny" + not_rotate_image + ".jpg", Meteo_WebFX.class), true);
     Image image_sunny_rot = new Image(Resource.toUrl("Background/sunny" + rotate_image + ".jpg", Meteo_WebFX.class), true);
+    Image image_night = new Image(Resource.toUrl("Background/night" + not_rotate_image + ".jpg", Meteo_WebFX.class), true);
+    Image image_night_rot = new Image(Resource.toUrl("Background/night" + rotate_image + ".jpg", Meteo_WebFX.class), true);
+    Image image_snow = new Image(Resource.toUrl("Background/snow" + not_rotate_image + ".jpg", Meteo_WebFX.class), true);
+    Image image_snow_rot = new Image(Resource.toUrl("Background/snow" + rotate_image + ".jpg", Meteo_WebFX.class), true);
+    Image image_thunder = new Image(Resource.toUrl("Background/thunder" + not_rotate_image + ".jpg", Meteo_WebFX.class), true);
+    Image image_thunder_rot = new Image(Resource.toUrl("Background/thunder" + rotate_image + ".jpg", Meteo_WebFX.class), true);
     Image image_tmp;
     ImageView image_view;
     BorderPane main_pane;
@@ -42,7 +48,7 @@ public class Stage_One_Pane extends Pane {
     HtmlText html_text;
     Web_Text web_text;
     Button forecast_graph_btn;
-    HBox settings_pane;
+    VBox settings_pane;
     Forecast_current forecast;
     Forecast_Daily forecast_daily;
     Forecast_Hourly forecast_hourly;
@@ -59,7 +65,7 @@ public class Stage_One_Pane extends Pane {
     String razmak_uv = "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp";
 
     public Stage_One_Pane(ImageView imageView, BorderPane main_pane, Canvas layer1, Canvas layer2, Button forecast_graph_btn, VBox toolTip_Vbox,
-                          Forecast_current forecast, Forecast_Daily forecast_daily, Forecast_Hourly forecast_hourly, AQI_Hourly aqi_hourly, HBox choice_group,HBox settings_pane){
+                          Forecast_current forecast, Forecast_Daily forecast_daily, Forecast_Hourly forecast_hourly, AQI_Hourly aqi_hourly, HBox choice_group,VBox settings_pane){
         super(imageView,main_pane,layer1,layer2,forecast_graph_btn,toolTip_Vbox,choice_group,settings_pane);
         this.main_pane = main_pane;
         this.image_view = imageView;
@@ -77,6 +83,12 @@ public class Stage_One_Pane extends Pane {
         image_list.add(image_rain_rot);
         image_list.add(image_sunny);
         image_list.add(image_sunny_rot);
+        image_list.add(image_night);
+        image_list.add(image_night_rot);
+        image_list.add(image_snow);
+        image_list.add(image_snow_rot);
+        image_list.add(image_thunder);
+        image_list.add(image_thunder_rot);
         setToolTip();
         addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override

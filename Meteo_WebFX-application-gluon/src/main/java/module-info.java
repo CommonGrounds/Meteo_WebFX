@@ -19,8 +19,11 @@ module Meteo_WebFX.application.gluon {
     requires webfx.platform.resource.gluon;
     requires webfx.platform.scheduler.java;
     requires webfx.platform.shutdown.gluon;
+    requires webfx.platform.storage.java;
+    requires webfx.platform.storagelocation.gluon;
     requires webfx.platform.useragent.gluon;
     requires webfx.platform.util.time;
+    requires webfx.platform.visibility.gluon;
     requires webfx.stack.i18n.ast;
     requires webfx.stack.ui.fxraiser.json;
 

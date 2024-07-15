@@ -74,24 +74,24 @@ public class Forecast_current {
     private String Weather_Code_Description(double weather_code) {
         String description;
         if ((int) weather_code < 2) {
-            Background_image_name = is_day > 0 ? "Background/sunny" : "Background/sunny";
+            Background_image_name = is_day > 0 ? "Background/sunny" : "Background/night";
             Background_audio_name = "nature-birds-singing-217212.mp3";
         } else if ((int) weather_code < 60) {
-            Background_image_name = is_day > 0 ? "Background/sunny" : "Background/sunny";
+            Background_image_name = is_day > 0 ? "Background/sunny" : "Background/night";
             Background_audio_name = "nature-birds-singing-217212.mp3";
         } else if ((int) weather_code < 95) {
             if ((int) weather_code > 70 && (int) weather_code < 80) {
-                Background_image_name = "Background/rain";
+                Background_image_name = "Background/snow";
                 Background_audio_name = "mixkit-bad-weather-heavy-rain-and-thunder-1261.wav";
             } else if ((int) weather_code > 82 && (int) weather_code < 90) {
-                Background_image_name = "Background/rain";
+                Background_image_name = "Background/snow";
                 Background_audio_name = "mixkit-bad-weather-heavy-rain-and-thunder-1261.wav";
             } else {
                 Background_image_name = "Background/rain";
                 Background_audio_name = "mixkit-bad-weather-heavy-rain-and-thunder-1261.wav";
             }
         } else {
-            Background_image_name = "Background/rain";
+            Background_image_name = "Background/thunder";
             Background_audio_name = "mixkit-bad-weather-heavy-rain-and-thunder-1261.wav";
         }
 

@@ -4,6 +4,7 @@ import com.java4now.meteo_webfx.Meteo_WebFX;
 import dev.webfx.platform.console.Console;
 import dev.webfx.platform.resource.Resource;
 import dev.webfx.platform.useragent.UserAgent;
+import dev.webfx.stack.i18n.I18n;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Rectangle2D;
@@ -229,7 +230,8 @@ public class WeatherGraphic {
         context1.setStroke(Color.rgb(255, 255, 255));
         context1.setLineWidth(2);
 
-        String DANI_U_NEDELJI[] = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+        String DANI_U_NEDELJI[] = {I18n.getI18nText("MONDAY"), I18n.getI18nText("TUESDAY"), I18n.getI18nText("WEDNESDAY"),
+                I18n.getI18nText("THURSDAY"), I18n.getI18nText("FRIDAY"), I18n.getI18nText("SATURDAY"), I18n.getI18nText("SUNDAY")};
 
         int offset = 11;
         if (!UserAgent.isBrowser()) {
@@ -239,7 +241,7 @@ public class WeatherGraphic {
 //            Console.log(forecast_hourly.time[h].substring(12,17) + " , h: " + h);
             if (h == 0) {
                 //------------------------ DAN / GODINA ----------------------------------
-                txt = "Today";
+                txt = I18n.getI18nText("TODAY");
                 context1.fillText(txt, (one_hour_width * 12) - Service_impl.measureText(txt, layer1) / 2, canvasHeight - 35);
                 continue;
             }
