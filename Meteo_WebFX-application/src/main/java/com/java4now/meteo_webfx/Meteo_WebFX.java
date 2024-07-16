@@ -51,7 +51,7 @@ import static com.java4now.meteo_webfx.shared.Forecast_current.Background_audio_
 
 public class Meteo_WebFX extends Application {
 
-//    Stage dialog;
+    //    Stage dialog;
     Stage dialogParent;
     Scene scene;
     Stage_One_Pane root_pane;
@@ -406,7 +406,7 @@ public class Meteo_WebFX extends Application {
 
         en = new Button("EN");
         en.getStyleClass().add("settings_button"); // ima efekta samo dok se ne pozove neka node style funk. koja ponistava css kao u handle()
-     //   en.getStyleClass().add("tooltip");
+        //   en.getStyleClass().add("tooltip");
         en.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
@@ -512,6 +512,7 @@ public class Meteo_WebFX extends Application {
                     music.play();
                     audio_btn.setText("Audio on");
                 }
+                saveState();
             }
         });
 
@@ -527,7 +528,7 @@ public class Meteo_WebFX extends Application {
             }
         });
 
-        VBox settings_pane = new VBox(lang_audio_pane,save);
+        VBox settings_pane = new VBox(lang_audio_pane/*,save*/);
         settings_pane.setSpacing(20);
         settings_pane.setAlignment(Pos.BASELINE_RIGHT);
 
@@ -647,6 +648,7 @@ public class Meteo_WebFX extends Application {
         image_view.setImage(image_wmo_icon);
 
         dataLoaded.setValue(false);
+        saveState();
     }
 
 
