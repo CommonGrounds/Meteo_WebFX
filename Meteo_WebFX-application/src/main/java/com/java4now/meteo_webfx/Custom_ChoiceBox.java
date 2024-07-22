@@ -34,6 +34,7 @@ public class Custom_ChoiceBox extends VBox {
 
     Custom_ChoiceBox() {
         for (int i = 0; i < 10; i++) {
+            focused = 0;
             btn_list.add(new Button());
             btn_list.get(i).getStyleClass().add("choice_list");
             btn_list.get(i).setMaxWidth(210);
@@ -42,10 +43,11 @@ public class Custom_ChoiceBox extends VBox {
             btn_list.get(i).setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent e) {
+                    focused = 0;
                     field.setText(btn_list.get(finalI).getText());
                     geocode_lat = geocode.lat_list.get(finalI);
                     geocode_lon = geocode.lon_list.get(finalI);
-                    title_icon.set("icon-24px/" + geocode.country_code_list.get(finalI)   + ".png");
+                    title_icon.set("icon-24px/" + geocode.country_code_list.get(finalI) + ".png");
                     choosen_country_code = geocode.country_code_list.get(finalI);
                     box.getChildren().clear();
                     box.setVisible(false);
@@ -54,34 +56,43 @@ public class Custom_ChoiceBox extends VBox {
             });
             btn_list.get(i).setOnKeyPressed((btn_key_event) -> {
                 if (btn_key_event.getCode() == KeyCode.DOWN) {
-                    if(focused < geocode.array_size -1){
+                    if (focused < geocode.array_size - 1) {
                         focused++;
                     }
                     btn_list.get(focused).requestFocus();
-                    if(UserAgent.isBrowser()){
-                        btn_list.get(focused-1).getStyleClass().remove("choice_list_focus");
+                    if (UserAgent.isBrowser()) {
+                        btn_list.get(focused - 1).getStyleClass().remove("choice_list_focus");
                         btn_list.get(focused).getStyleClass().add("choice_list_focus");
                     }
 //                    dev.webfx.platform.console.Console.log("down, focus(" + focused + "): " + btn_list.get(focused).isFocused());
                 } else if (btn_key_event.getCode() == KeyCode.UP) {
-                    if(focused > 0){
+                    if (focused > 0) {
                         focused--;
                     }
                     Console.log("up");
                     btn_list.get(focused).requestFocus();
-                    if(UserAgent.isBrowser()){
-                        btn_list.get(focused+1).getStyleClass().remove("choice_list_focus");
+                    if (UserAgent.isBrowser()) {
+                        btn_list.get(focused + 1).getStyleClass().remove("choice_list_focus");
                         btn_list.get(focused).getStyleClass().add("choice_list_focus");
                     }
                 } else if (btn_key_event.getCode() == KeyCode.ENTER) {
                     Console.log("enter");
+                    btn_list.get(focused).getStyleClass().remove("choice_list_focus");
+                    focused = 0;
                     field.setText(btn_list.get(finalI).getText());
-                    title_icon.set("icon-24px/" + geocode.country_code_list.get(finalI)   + ".png");
+                    title_icon.set("icon-24px/" + geocode.country_code_list.get(finalI) + ".png");
                     choosen_country_code = geocode.country_code_list.get(finalI);
                     geocode_lat = geocode.lat_list.get(finalI);
                     geocode_lon = geocode.lon_list.get(finalI);
                     Console.log(geocode.name_list.get(finalI) + "," + geocode_lat + "," + geocode.country_list.get(finalI));
                     box.getChildren().clear();
+                    //--------------- da bi izbegao focus na textfield --------------
+                    box.requestFocus();
+                    if (UserAgent.isBrowser()) {
+                        this.getChildren().remove(0);
+                        this.getChildren().add(0, field);
+                    }
+//----------------------------------------------------------------
                     box.setVisible(false);
                     geo_is_set.setValue(true);
                 }
@@ -94,12 +105,18 @@ public class Custom_ChoiceBox extends VBox {
         field.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
+
+                if (event.getCode() == KeyCode.BACK_SPACE) {
+//                    Console.log("backspace");
+//                    field.requestFocus();
+                }
+
                 if (field.getText().length() < 2) {
                     return;
                 }
-                if(event.getCode().isArrowKey()){
+                if (event.getCode().isArrowKey()) {
                     btn_list.get(0).requestFocus();
-                    if(UserAgent.isBrowser()){
+                    if (UserAgent.isBrowser()) {
                         btn_list.get(0).getStyleClass().add("choice_list_focus");
                     }
                     return;
@@ -117,14 +134,10 @@ public class Custom_ChoiceBox extends VBox {
                         int limit = geocode.array_size;
                         for (int i = 0; i < limit; i++) {
                             String[] city = geocode.name_list.get(i).split(" ");
-                            if(Objects.equals(geocode.country_list.get(i), null)){
-                                geocode.country_list.set(i,"Antartica");
-                            }else{
-                                if(city.length > 1){
-                                    btn_list.get(i).setText(city[0] + " " + city[1] + " - " + geocode.country_list.get(i));
-                                }else{
-                                    btn_list.get(i).setText(city[0] + " - " + geocode.country_list.get(i));
-                                }
+                            if (city.length > 1) {
+                                btn_list.get(i).setText(city[0] + " " + city[1] + " - " + geocode.country_list.get(i));
+                            } else {
+                                btn_list.get(i).setText(city[0] + " - " + geocode.country_list.get(i));
                             }
 //                            dev.webfx.platform.console.Console.log(btn_list.get(i).getText());
                             box.getChildren().add(btn_list.get(i));
@@ -138,6 +151,14 @@ public class Custom_ChoiceBox extends VBox {
                 });
             }
         });
+        field.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                field.setText("");
+                field.requestFocus(); // key handleri da odmah reaguju
+            }
+        });
+
         box.setVisible(false);
 
         getChildren().addAll(field, box);

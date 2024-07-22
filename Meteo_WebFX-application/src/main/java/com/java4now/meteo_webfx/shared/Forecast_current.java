@@ -76,7 +76,7 @@ public class Forecast_current {
         if ((int) weather_code < 2) {
             Background_image_name = is_day > 0 ? "Background/sunny" : "Background/night";
             Background_audio_name = "nature-birds-singing-217212.mp3";
-        } else if ((int) weather_code < 60) {
+        } else if ((int) weather_code < 50) { // bilo 60
             Background_image_name = is_day > 0 ? "Background/sunny" : "Background/night";
             Background_audio_name = "nature-birds-singing-217212.mp3";
         } else if ((int) weather_code < 95) {

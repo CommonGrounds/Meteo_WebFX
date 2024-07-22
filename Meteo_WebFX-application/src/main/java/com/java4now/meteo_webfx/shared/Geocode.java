@@ -1,5 +1,6 @@
 package com.java4now.meteo_webfx.shared;
 
+import dev.webfx.platform.console.Console;
 import dev.webfx.platform.ast.ReadOnlyAstArray;
 import dev.webfx.platform.ast.ReadOnlyAstObject;
 import dev.webfx.platform.ast.json.Json;
@@ -19,34 +20,55 @@ public class Geocode {
     public ArrayList<String> admin3_list = new ArrayList<>();
     public ArrayList<String> country_list = new ArrayList<>();
     public ArrayList<String> country_code_list = new ArrayList<>();
+    public ArrayList<String> timezone = new ArrayList<>();
     public ArrayList<Double> postcodes_list = new ArrayList<>();
     public int array_size = 0;
 
     public void parseData(String GeoData) {
 
         geocode_done.setValue(false);
-        array_size = 0;name_list.clear();lat_list.clear();lon_list.clear();admin1_list.clear();admin3_list.clear();country_list.clear();country_code_list.clear();
+        array_size = 0;
+        name_list.clear();
+        lat_list.clear();
+        lon_list.clear();
+        admin1_list.clear();
+        admin3_list.clear();
+        country_list.clear();
+        country_code_list.clear();
         ReadOnlyAstArray results = null;
-        try{
+        try {
             results = Json.parseObject(GeoData).getArray("results");
-        }catch (Exception e){
+        } catch (Exception e) {
             return;
         }
         for (int obj = 0; obj < results.size(); obj++) {
             ReadOnlyAstObject list;
             list = results.getObject(obj);
 //                Console.log( list);
-                name_list.add(list.getString("name"));
+            name_list.add(list.getString("name"));
+//            timezone.add(list.getString("timezone"));
 //                    Console.log( name_list.get(i));
-                lat_list.add(list.getDouble("latitude"));
-                lon_list.add(list.getDouble("longitude"));
-                admin1_list.add(list.getString("admin1"));
-                admin3_list.add(list.getString("admin3"));
-                country_list.add(list.getString("country"));
-                country_code_list.add(list.getString("country_code"));
+            lat_list.add(list.getDouble("latitude"));
+            lon_list.add(list.getDouble("longitude"));
+//            admin1_list.add(list.getString("admin1").equals(null) ? "???" : list.getString("admin1"));
+//            admin3_list.add(list.getString("admin3").equals(null) ? "???" : list.getString("admin3"));
+            try{
+                String s = list.getString("country");
+                if(s == null){
+                    String[] str = list.getString("timezone").split("/");
+                    country_list.add(str[0]);
+                }else{
+                    country_list.add(s);
+                }
+            }catch(Exception e){
+                country_list.add("Unknown");
+                Console.log("geocode parsing error");
+            }
+            country_code_list.add(list.getString("country_code"));
 //                postcodes_list.add(results.getDouble("postcodes"));
 //                Console.log( obj + ": " + name_list.get(obj) + " , " + lat_list.get(obj));
-//                Console.log(list.getString("country_code"));
+//            Console.log(list.getString("admin1") + "," + list.getString("admin3") + "," + list.getString("country") + "," +
+//                    list.getString("country_code") + "," + list.getString("timezone"));
 
                 /*
                 try {

@@ -1,5 +1,6 @@
 humidity:
       text: "Vlaznost: "
+#Wind_Speed: Brzina vetra {0} {1}!
 Wind_Speed:
       text: "Brzina vetra: "
 Wind_Direction:
@@ -17,7 +18,7 @@ Time:
 In:
       text: "u "
 ChooseCity:
-      text: "Izaberi Grad"
+      text: "Traži Grad"
 Save_Settings:
       text: "Sačuvaj"
 Update:

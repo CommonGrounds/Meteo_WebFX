@@ -1,5 +1,6 @@
 humidity:
   text: "Humidité: "
+#Wind_Speed: Vitesse du vent {0} {1}!
 Wind_Speed:
   text: "Vitesse du vent: "
 Wind_Direction:
@@ -17,7 +18,7 @@ Time:
 In:
   text: "dans "
 ChooseCity:
-  text: "Choisir la ville"
+  text: "Recherche la ville"
 Save_Settings:
   text: "Enregistrer les paramètres"
 Update:

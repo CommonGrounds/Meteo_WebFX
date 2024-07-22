@@ -14,6 +14,7 @@ import dev.webfx.platform.util.Booleans;
 import dev.webfx.platform.util.Numbers;
 import dev.webfx.platform.util.Strings;
 import dev.webfx.stack.i18n.I18n;
+//import dev.webfx.stack.i18n.controls.I18nControls;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
@@ -51,7 +52,7 @@ import static com.java4now.meteo_webfx.shared.Forecast_current.Background_audio_
 
 public class Meteo_WebFX extends Application {
 
-    //    Stage dialog;
+//    Stage dialog;
     Stage dialogParent;
     Scene scene;
     Stage_One_Pane root_pane;
@@ -113,8 +114,8 @@ public class Meteo_WebFX extends Application {
         Service_impl.getCompilerVersion();
 
         // TODO - i18n more translations
-        I18n.bindI18nTextProperty(wind_spd_lbl, "Wind_Speed"); // samo binding ne koristim translete ovde nego u setNewData()
-        I18n.bindI18nTextProperty(wind_dir_lbl, "Wind_Direction");
+//        I18n.bindI18nTextProperty(wind_spd_lbl, "Wind_Speed","","");
+        I18n.bindI18nTextProperty(wind_dir_lbl, "Wind_Direction"); // samo binding ne koristim translete ovde nego u setNewData()
         I18n.bindI18nTextProperty(hum_lbl, "humidity");
         I18n.bindI18nTextProperty(press_lbl, "Pressure");
         I18n.bindI18nTextProperty(dust_lbl, "Dust");
@@ -272,7 +273,7 @@ public class Meteo_WebFX extends Application {
 //        I18n.setLanguage("sr");
         Temperature = new Label("Temp: --");
         Wind_Speed = new Label("Wind Spd: --");
-//        I18nControls.bindI18nProperties(Wind_Speed, "Wind_Speed");
+//        I18nControls.bindI18nProperties(Wind_Speed, "Wind_Speed",": --","");
         Wind_Direction = new Label("Wind dir: --");
         Vlaznost = new Label("Humidity: --");
         Pritisak = new Label("Pressure: --");
@@ -406,7 +407,7 @@ public class Meteo_WebFX extends Application {
 
         en = new Button("EN");
         en.getStyleClass().add("settings_button"); // ima efekta samo dok se ne pozove neka node style funk. koja ponistava css kao u handle()
-        //   en.getStyleClass().add("tooltip");
+     //   en.getStyleClass().add("tooltip");
         en.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
@@ -571,11 +572,12 @@ public class Meteo_WebFX extends Application {
 
 
         Temperature.setText("Temp: " + forecast.temperature + "  °C");
-        // TODO - i18n
 //        Wind_Speed.setText("Wind Spd: " + forecast.wind_speed + " km/h");
-//        I18nControls.setI18nTextProperty(Wind_Speed,"Wind_Speed",forecast.wind_speed + " km/h");
-        Wind_Speed.setText(I18n.getI18nText("Wind_Speed") + forecast.wind_speed + " km/h");
-        Wind_Direction.setText(I18n.getI18nText("Wind_Direction") + forecast.wind_direction + " °");
+        Wind_Speed.setText(I18n.getI18nText("Wind_Speed") + forecast.wind_speed + " km/h"); // direktno
+        // TODO I18nControls
+//        wind_spd_lbl.set(": " + forecast.wind_speed);
+//        I18nControls.bindI18nProperties(Wind_Speed, "Wind_Speed", wind_spd_lbl, new SimpleStringProperty(" km/h")); // i18controls with param
+        Wind_Direction.setText(I18n.getI18nText("Wind_Direction") + forecast.wind_direction + " °"); // direct
         Vlaznost.setText(I18n.getI18nText("humidity") + forecast.relative_humidity + " %");
         Pritisak.setText(I18n.getI18nText("Pressure") + forecast.surface_pressure + " hPa");
 
